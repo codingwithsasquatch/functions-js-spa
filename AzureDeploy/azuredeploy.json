@@ -41,7 +41,7 @@
         "description": "Repo for the code to be deployed to the function."
       },
       "defaultValue": "https://github.com/codingwithsasquatch/functions-js-spa.git"
-    },
+    }
   },
   "variables": {
     "functionAppName": "[concat(parameters('appName'), '-', substring(uniquestring(resourceGroup().id), 0, 6))]",
