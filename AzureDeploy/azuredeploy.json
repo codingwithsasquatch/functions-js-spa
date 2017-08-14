@@ -21,21 +21,31 @@
         "description": "Storage Account type"
       }
     },
-    "storageUrlAndContainer": {
+    "staticStorage": {
       "type": "string",
       "metadata": {
-        "description": "Path to storage account and container where content files are stored, in the form https://accountname.blob.core.windows.net/ContentFiles. Ensure the container is set to public read access and CORS is enabled on the storage account."
-      }
+        "description": "Domain of the storage account in the form https://accountname.blob.core.windows.net excluding the container name. If you leave it as 'default' the same storage account used for the function will be used for the static content"
+      },
+      "defaultValue": "default"
+    },
+    "staticContainer": {
+      "type": "string",
+      "metadata": {
+        "description": "Container holding the static files. Ensure the container is set to public read access and CORS is enabled on the storage account."
+      },
+      "defaultValue": "static"
     },
     "repoUrl": {
       "type": "string"
-    }
+    },
+    "defaultValue": "https://github.com/codingwithsasquatch/functions-js-spa.git"
   },
   "variables": {
     "functionAppName": "[concat(parameters('appName'), '-', substring(uniquestring(resourceGroup().id), 0, 6))]",
     "hostingPlanName": "[concat(parameters('appName'), substring(uniquestring(resourceGroup().id), 0, 6))]",
     "storageAccountName": "[concat(substring(uniquestring(resourceGroup().id), 0, 6), 'azfunctions')]",
-    "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+    "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+    "staticStorageUrl": "[if(equals(parameters('staticStorage'),'default'),concat('https://',variables('storageAccountName'),'.blob.core.windows.net/',parameters('staticContainer')), concat(parameters('staticStorage'),'/',parameters('staticContainer')))]"
   },
   "resources": [
     {
@@ -106,7 +116,7 @@
             },
             {
               "name": "STORAGE_URL_AND_CONTAINER",
-              "value": "[parameters('storageUrlAndContainer')]"
+              "value": "[variables('staticStorageUrl')]"
             }
           ]
         }
