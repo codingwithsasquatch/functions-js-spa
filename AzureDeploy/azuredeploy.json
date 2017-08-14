@@ -120,6 +120,10 @@
             {
               "name": "STORAGE_URL_AND_CONTAINER",
               "value": "[variables('staticStorageUrl')]"
+            },
+            {
+              "name": "FUNCTION_URL",
+              "value": "[concat('https://',variables('functionAppName'),'azurewebsites.net')]"
             }
           ]
         }
